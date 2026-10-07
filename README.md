@@ -24,28 +24,32 @@ Load the required packages before the macros in your preamble:
 The macros define mathematical notation and algorithm names. Configure editing
 authors in the document preamble with `\addauthor`, as in the example above.
 The shared file does not register authors or override their colors. With `article` or `report`, theorem environments use `amsthm`, share a
-counter numbered by section, and default to French. With LLNCS, load only
+counter numbered by section. With LLNCS, load only
 `amsmath,amssymb` before the macros. The class's native environments, numbering,
 and English default are preserved.
 
 ## French and English environments
 
-The base names are `theorem`, `lemma`, `proposition`, `corollary`, `property`,
-`definition`, `assumption`, `remark`, `example`, and `proof`. Use `\macrosenglish`
-or `\macrosfrench` to select their heading language, or append `en` or `fr` to
-an environment name for a local choice. The explicit variants share the base
-counters and accept the same optional titles. Their language choice does not
-change subsequent environments. Only headings are translated. Authors supply
-the statement and any optional title in the desired language.
+Environment names select their heading language. English names are `theorem`,
+`lemma`, `proposition`, `corollary`, `property`, `definition`, `assumption`,
+`remark`, `example`, and `proof`. Their French counterparts are `theoreme`,
+`lemme`, `propositionfr`, `corollaire`, `propriete`, `definitionfr`, `hypothese`,
+`remarque`, `exemple`, and `preuve`.
+
+`propositionfr` and `definitionfr` retain a suffix because their French and
+English names have the same spelling without accents. The previous names with
+`fr` or `en` suffixes remain available. French and English variants share
+counters and accept optional titles. Only headings are translated. Authors
+supply the statement and any optional title in the desired language.
 
 ```tex
-\begin{theoremen}[Robustness coefficient]
+\begin{theorem}[Robustness coefficient]
   Your English statement.
-\end{theoremen}
+\end{theorem}
 
-\begin{theoremfr}[Coefficient de robustesse]
+\begin{theoreme}[Coefficient de robustesse]
   Votre énoncé français.
-\end{theoremfr}
+\end{theoreme}
 ```
 
 ## Subset robustness notation
@@ -91,6 +95,9 @@ git commit -m "Update shared LaTeX macros."
 
 ## Verification
 
+GitHub Actions runs `tests/check.py` on every push and pull request. The workflow
+can also be started manually from the Actions tab.
+
 With `pdflatex`, `pdftotext`, and `llncs.cls` available, run:
 
 ```sh
@@ -98,6 +105,6 @@ python3 tests/check.py
 ```
 
 The check compiles both classes, verifies bilingual headings and optional titles,
-checks that language switches are local and theorem variants share numbering,
+checks that environment names select the language and theorem variants share numbering,
 and exercises the subset definitions with renamed parameters. Generated files
 are kept in a temporary directory.

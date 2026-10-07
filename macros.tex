@@ -11,74 +11,67 @@
 \newcommand{\norm}[1]{\lVert #1 \rVert} % The Euclidean norm.
 \newcommand{\sumn}{\sum_{i=1}^{\nworkers}} % The sum includes all workers.
 
-% Heading language changes do not translate statement bodies.
-\newcommand{\macrosenglish}{%
-  \def\theoremname{Theorem}%
-  \def\lemmaname{Lemma}%
-  \def\propositionname{Proposition}%
-  \def\corollaryname{Corollary}%
-  \def\propertyname{Property}%
-  \def\definitionname{Definition}%
-  \def\assumptionname{Assumption}%
-  \def\remarkname{Remark}%
-  \def\examplename{Example}%
-  \def\proofname{Proof}%
-}
-\newcommand{\macrosfrench}{%
-  \def\theoremname{Théorème}%
-  \def\lemmaname{Lemme}%
-  \def\propositionname{Proposition}%
-  \def\corollaryname{Corollaire}%
-  \def\propertyname{Propriété}%
-  \def\definitionname{Définition}%
-  \def\assumptionname{Hypothèse}%
-  \def\remarkname{Remarque}%
-  \def\examplename{Exemple}%
-  \def\proofname{Preuve}%
-}
-
-% LLNCS retains its native environments and numbering.
+% Environment names select the heading language, not the statement body.
+% LLNCS retains its native English environments and numbering.
 % Other classes use amsthm, which must be loaded before this file.
 \ifdefined\spnewtheorem
-  \macrosenglish
   \spnewtheorem{assumption}[theorem]{Assumption}{\bfseries}{\itshape}
+  \spnewtheorem{theoreme}[theorem]{Théorème}{\bfseries}{\itshape}
+  \spnewtheorem{lemme}[theorem]{Lemme}{\bfseries}{\itshape}
+  \spnewtheorem{propositionfr}[theorem]{Proposition}{\bfseries}{\itshape}
+  \spnewtheorem{corollaire}[theorem]{Corollaire}{\bfseries}{\itshape}
+  \spnewtheorem{propriete}[theorem]{Propriété}{\bfseries}{\itshape}
+  \spnewtheorem{definitionfr}[theorem]{Définition}{\bfseries}{\rmfamily}
+  \spnewtheorem{hypothese}[theorem]{Hypothèse}{\bfseries}{\rmfamily}
+  \spnewtheorem{remarque}[theorem]{Remarque}{\itshape}{\rmfamily}
+  \spnewtheorem{exemple}[theorem]{Exemple}{\itshape}{\rmfamily}
+  \spnewtheorem*{preuve}{Preuve}{\itshape}{\rmfamily}
 \else
-  \macrosfrench
+  \providecommand{\proofname}{Proof}
+  \renewcommand{\proofname}{Proof}
   \theoremstyle{plain}
-  \newtheorem{theorem}{\theoremname}[section]
-  \newtheorem{lemma}[theorem]{\lemmaname}
-  \newtheorem{proposition}[theorem]{\propositionname}
-  \newtheorem{corollary}[theorem]{\corollaryname}
-  \newtheorem{property}[theorem]{\propertyname}
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem{theoreme}[theorem]{Théorème}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{lemme}[theorem]{Lemme}
+  \newtheorem{proposition}[theorem]{Proposition}
+  \newtheorem{propositionfr}[theorem]{Proposition}
+  \newtheorem{corollary}[theorem]{Corollary}
+  \newtheorem{corollaire}[theorem]{Corollaire}
+  \newtheorem{property}[theorem]{Property}
+  \newtheorem{propriete}[theorem]{Propriété}
   \theoremstyle{definition}
-  \newtheorem{definition}[theorem]{\definitionname}
-  \newtheorem{assumption}[theorem]{\assumptionname}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{definitionfr}[theorem]{Définition}
+  \newtheorem{assumption}[theorem]{Assumption}
+  \newtheorem{hypothese}[theorem]{Hypothèse}
   \theoremstyle{remark}
-  \newtheorem{remark}[theorem]{\remarkname}
-  \newtheorem{example}[theorem]{\examplename}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem{remarque}[theorem]{Remarque}
+  \newtheorem{example}[theorem]{Example}
+  \newtheorem{exemple}[theorem]{Exemple}
+  \newenvironment{preuve}[1][Preuve]{\begin{proof}[#1]}{\end{proof}}
 \fi
 
-% Explicit language variants share the counters of the base environments.
-\newenvironment{theoremfr}{\macrosfrench\begin{theorem}}{\end{theorem}}
-\newenvironment{theoremen}{\macrosenglish\begin{theorem}}{\end{theorem}}
-\newenvironment{lemmafr}{\macrosfrench\begin{lemma}}{\end{lemma}}
-\newenvironment{lemmaen}{\macrosenglish\begin{lemma}}{\end{lemma}}
-\newenvironment{propositionfr}{\macrosfrench\begin{proposition}}{\end{proposition}}
-\newenvironment{propositionen}{\macrosenglish\begin{proposition}}{\end{proposition}}
-\newenvironment{corollaryfr}{\macrosfrench\begin{corollary}}{\end{corollary}}
-\newenvironment{corollaryen}{\macrosenglish\begin{corollary}}{\end{corollary}}
-\newenvironment{propertyfr}{\macrosfrench\begin{property}}{\end{property}}
-\newenvironment{propertyen}{\macrosenglish\begin{property}}{\end{property}}
-\newenvironment{definitionfr}{\macrosfrench\begin{definition}}{\end{definition}}
-\newenvironment{definitionen}{\macrosenglish\begin{definition}}{\end{definition}}
-\newenvironment{assumptionfr}{\macrosfrench\begin{assumption}}{\end{assumption}}
-\newenvironment{assumptionen}{\macrosenglish\begin{assumption}}{\end{assumption}}
-\newenvironment{remarkfr}{\macrosfrench\begin{remark}}{\end{remark}}
-\newenvironment{remarken}{\macrosenglish\begin{remark}}{\end{remark}}
-\newenvironment{examplefr}{\macrosfrench\begin{example}}{\end{example}}
-\newenvironment{exampleen}{\macrosenglish\begin{example}}{\end{example}}
-\newenvironment{prooffr}{\macrosfrench\begin{proof}}{\end{proof}}
-\newenvironment{proofen}{\macrosenglish\begin{proof}}{\end{proof}}
+% Previous suffixed names remain available with the same counters.
+\newenvironment{theoremfr}{\begin{theoreme}}{\end{theoreme}}
+\newenvironment{theoremen}{\begin{theorem}}{\end{theorem}}
+\newenvironment{lemmafr}{\begin{lemme}}{\end{lemme}}
+\newenvironment{lemmaen}{\begin{lemma}}{\end{lemma}}
+\newenvironment{propositionen}{\begin{proposition}}{\end{proposition}}
+\newenvironment{corollaryfr}{\begin{corollaire}}{\end{corollaire}}
+\newenvironment{corollaryen}{\begin{corollary}}{\end{corollary}}
+\newenvironment{propertyfr}{\begin{propriete}}{\end{propriete}}
+\newenvironment{propertyen}{\begin{property}}{\end{property}}
+\newenvironment{definitionen}{\begin{definition}}{\end{definition}}
+\newenvironment{assumptionfr}{\begin{hypothese}}{\end{hypothese}}
+\newenvironment{assumptionen}{\begin{assumption}}{\end{assumption}}
+\newenvironment{remarkfr}{\begin{remarque}}{\end{remarque}}
+\newenvironment{remarken}{\begin{remark}}{\end{remark}}
+\newenvironment{examplefr}{\begin{exemple}}{\end{exemple}}
+\newenvironment{exampleen}{\begin{example}}{\end{example}}
+\newenvironment{prooffr}{\begin{preuve}}{\end{preuve}}
+\newenvironment{proofen}{\begin{proof}}{\end{proof}}
 
 % Mathematical operators follow.
 \DeclareMathOperator*{\argmin}{arg\,min}

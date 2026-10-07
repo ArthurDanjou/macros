@@ -19,6 +19,11 @@ HEADINGS = {
     "proof": ("Preuve", "Proof"),
 }
 
+FRENCH_NAMES = dict(zip(HEADINGS, (
+    "theoreme", "lemme", "propositionfr", "corollaire", "propriete",
+    "definitionfr", "hypothese", "remarque", "exemple", "preuve",
+)))
+
 
 def check(document_class, directory):
     packages = "amsmath,amssymb" + (",amsthm" if document_class == "article" else "")
@@ -31,8 +36,8 @@ def check(document_class, directory):
         r"\begin{document}\section{Checks}" + "\n"
     )
     for environment in HEADINGS:
-        for language in ("fr", "en", ""):
-            name = environment + language
+        for name in dict.fromkeys((FRENCH_NAMES[environment], environment,
+                                   environment + "fr", environment + "en")):
             title = "[Optional title]" if environment != "proof" else ""
             source += (
                 rf"\begin{{{name}}}{title}Statement.\label{{{name}}}\end{{{name}}}"
@@ -65,10 +70,17 @@ def check(document_class, directory):
         assert french in text and english in text, (document_class, french, english)
     aux = path.with_suffix(".aux").read_text()
     labels = dict(re.findall(r"\\newlabel\{([^}]+)\}\{\{([^}]+)\}", aux))
-    expected = ("1.1", "1.2", "1.3") if document_class == "article" else ("1", "2", "3")
-    assert tuple(labels[name] for name in ("theoremfr", "theoremen", "theorem")) == expected
-    default = "Théorème" if document_class == "article" else "Theorem"
-    assert f"{default} {expected[2]} (Optional title)" in text
+    for environment, (french, english) in HEADINGS.items():
+        if environment != "proof":
+            for name, heading in ((FRENCH_NAMES[environment], french),
+                                  (environment, english),
+                                  (environment + "fr", french),
+                                  (environment + "en", english)):
+                assert f"{heading} {labels[name]} (Optional title)" in text, name
+    expected = ("1.1", "1.2", "1.3", "1.4") if document_class == "article" else ("1", "2", "3", "4")
+    assert tuple(labels[name] for name in ("theoreme", "theorem", "theoremfr", "theoremen")) == expected
+    for heading, number in zip(("Théorème", "Theorem", "Théorème", "Theorem"), expected):
+        assert f"{heading} {number} (Optional title)" in text
     assert "PARAMETERS: N,b,N-b" in path.with_suffix(".log").read_text()
     print(f"{document_class}: bilingual headings, optional titles, counters, scope, and notation passed.")
 
