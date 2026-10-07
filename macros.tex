@@ -1,58 +1,138 @@
-% macros.tex — notations du mémoire (ML distribué, Byzantin, code)
-% Convention : commandes en français/anglais explicites, rien de spéculatif.
+% Shared notation for distributed learning, Byzantine robustness, and code.
+% Commands use explicit French or English names.
 
-% --- Texte ---
+% Text commands follow.
 \newcommand{\textcode}[1]{\texttt{#1}}
 
-% --- Éditions colorées (relecture) : génère \arthuredit{}, \arthurreplace{}{},
-% \arthurcomment{}, \arthurdelete{} ; option [suppress] pour tout masquer ---
-\addauthor{arthur}{red}
+% Editing authors and colors are configured by the document preamble.
 
-% --- Maths de base ---
-\newcommand{\vect}[1]{\boldsymbol{#1}} % vecteur / gradient
-\newcommand{\norm}[1]{\lVert #1 \rVert} % norme euclidienne
-\newcommand{\sumn}{\sum_{i=1}^{n}} % somme sur n workers
+% Basic mathematical notation follows.
+\newcommand{\vect}[1]{\boldsymbol{#1}} % A vector or gradient.
+\newcommand{\norm}[1]{\lVert #1 \rVert} % The Euclidean norm.
+\newcommand{\sumn}{\sum_{i=1}^{\nworkers}} % The sum includes all workers.
 
-% --- Environnements mathématiques ---
-% Requiert amsmath, amssymb et amsthm chargés avant cet input.
-% Compteur partagé, numérotation par section : valable en article comme en report.
-% Preuve et fin de preuve : environnement proof fourni par amsthm.
-\theoremstyle{plain}
-\newtheorem{theorem}{Théorème}[section]
-\newtheorem{lemma}[theorem]{Lemme}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollaire}
-\newtheorem{property}[theorem]{Propriété}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Définition}
-\newtheorem{assumption}[theorem]{Hypothèse}
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remarque}
-\newtheorem{example}[theorem]{Exemple}
+% Heading language changes do not translate statement bodies.
+\newcommand{\macrosenglish}{%
+  \def\theoremname{Theorem}%
+  \def\lemmaname{Lemma}%
+  \def\propositionname{Proposition}%
+  \def\corollaryname{Corollary}%
+  \def\propertyname{Property}%
+  \def\definitionname{Definition}%
+  \def\assumptionname{Assumption}%
+  \def\remarkname{Remark}%
+  \def\examplename{Example}%
+  \def\proofname{Proof}%
+}
+\newcommand{\macrosfrench}{%
+  \def\theoremname{Théorème}%
+  \def\lemmaname{Lemme}%
+  \def\propositionname{Proposition}%
+  \def\corollaryname{Corollaire}%
+  \def\propertyname{Propriété}%
+  \def\definitionname{Définition}%
+  \def\assumptionname{Hypothèse}%
+  \def\remarkname{Remarque}%
+  \def\examplename{Exemple}%
+  \def\proofname{Preuve}%
+}
 
-% --- Opérateurs mathématiques ---
+% LLNCS retains its native environments and numbering.
+% Other classes use amsthm, which must be loaded before this file.
+\ifdefined\spnewtheorem
+  \macrosenglish
+  \spnewtheorem{assumption}[theorem]{Assumption}{\bfseries}{\itshape}
+\else
+  \macrosfrench
+  \theoremstyle{plain}
+  \newtheorem{theorem}{\theoremname}[section]
+  \newtheorem{lemma}[theorem]{\lemmaname}
+  \newtheorem{proposition}[theorem]{\propositionname}
+  \newtheorem{corollary}[theorem]{\corollaryname}
+  \newtheorem{property}[theorem]{\propertyname}
+  \theoremstyle{definition}
+  \newtheorem{definition}[theorem]{\definitionname}
+  \newtheorem{assumption}[theorem]{\assumptionname}
+  \theoremstyle{remark}
+  \newtheorem{remark}[theorem]{\remarkname}
+  \newtheorem{example}[theorem]{\examplename}
+\fi
+
+% Explicit language variants share the counters of the base environments.
+\newenvironment{theoremfr}{\macrosfrench\begin{theorem}}{\end{theorem}}
+\newenvironment{theoremen}{\macrosenglish\begin{theorem}}{\end{theorem}}
+\newenvironment{lemmafr}{\macrosfrench\begin{lemma}}{\end{lemma}}
+\newenvironment{lemmaen}{\macrosenglish\begin{lemma}}{\end{lemma}}
+\newenvironment{propositionfr}{\macrosfrench\begin{proposition}}{\end{proposition}}
+\newenvironment{propositionen}{\macrosenglish\begin{proposition}}{\end{proposition}}
+\newenvironment{corollaryfr}{\macrosfrench\begin{corollary}}{\end{corollary}}
+\newenvironment{corollaryen}{\macrosenglish\begin{corollary}}{\end{corollary}}
+\newenvironment{propertyfr}{\macrosfrench\begin{property}}{\end{property}}
+\newenvironment{propertyen}{\macrosenglish\begin{property}}{\end{property}}
+\newenvironment{definitionfr}{\macrosfrench\begin{definition}}{\end{definition}}
+\newenvironment{definitionen}{\macrosenglish\begin{definition}}{\end{definition}}
+\newenvironment{assumptionfr}{\macrosfrench\begin{assumption}}{\end{assumption}}
+\newenvironment{assumptionen}{\macrosenglish\begin{assumption}}{\end{assumption}}
+\newenvironment{remarkfr}{\macrosfrench\begin{remark}}{\end{remark}}
+\newenvironment{remarken}{\macrosenglish\begin{remark}}{\end{remark}}
+\newenvironment{examplefr}{\macrosfrench\begin{example}}{\end{example}}
+\newenvironment{exampleen}{\macrosenglish\begin{example}}{\end{example}}
+\newenvironment{prooffr}{\macrosfrench\begin{proof}}{\end{proof}}
+\newenvironment{proofen}{\macrosenglish\begin{proof}}{\end{proof}}
+
+% Mathematical operators follow.
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 
-% --- Apprentissage distribué ---
-\newcommand{\grad}{g} % gradient stochastique
-\newcommand{\loss}{\mathcal{L}} % fonction objectif
-\newcommand{\dataset}{\mathcal{D}} % jeu de données
-\newcommand{\model}{w} % paramètres du modèle
+% Distributed learning notation follows.
+\newcommand{\grad}{g} % The stochastic gradient.
+\newcommand{\loss}{\mathcal{L}} % The objective function.
+\newcommand{\dataset}{\mathcal{D}} % The dataset.
+\newcommand{\model}{w} % The model parameters.
 
-% --- Byzantin ---
-\newcommand{\nworkers}{n} % nombre total de workers
-\newcommand{\nbyz}{f} % nombre de malicieux
-\newcommand{\nselected}{m} % nombre de gradients sélectionnés par MultiKrum
-\newcommand{\honest}{\mathcal{H}} % ensemble des honnêtes
-\newcommand{\byzset}{\mathcal{B}} % ensemble des malhonnêtes
+% Byzantine robustness notation follows.
+\newcommand{\nworkers}{n} % The total number of workers.
+\newcommand{\nbyz}{f} % The number of Byzantine workers.
+\newcommand{\nselected}{m} % The number of gradients selected by MultiKrum.
+\newcommand{\honest}{\mathcal{H}} % The set of honest workers.
+\newcommand{\byzset}{\mathcal{B}} % The set of Byzantine workers.
 
-% --- Nom de la librairie (robuste aux signets PDF) ---
-% \krum (minuscules, monospace) désigne la règle d'agrégation, comme les
-% autres macros d'agrégateurs ci-dessous ; ne pas confondre.
+% Reference subsets are not identified with the honest workers.
+\newcommand{\dimension}{d}
+\newcommand{\workerindices}{[\nworkers]}
+\newcommand{\refset}{\mathcal{S}}
+\newcommand{\refcomplement}{\mathcal{A}}
+\newcommand{\nreference}{\nworkers-\nbyz}
+\newcommand{\subsets}[2]{\mathcal{P}^{#1}_{#2}}
+\newcommand{\refsubsets}{\subsets{\nworkers}{\nreference}}
+\newcommand{\refsubsetsdef}{\refsubsets \triangleq
+  \{\refset \subset \workerindices : |\refset| = \nreference\}}
+\newcommand{\vectorspace}{\mathbb{R}^{\dimension}}
+\newcommand{\signspace}{\{-1,+1\}^{\dimension}}
+\newcommand{\inputvectors}{\mathcal{X}}
+\newcommand{\aggregator}{F}
+\newcommand{\refmean}{\bar{x}_{\refset}}
+\newcommand{\refcoordmean}[1]{\bar{x}_{\refset,#1}}
+\newcommand{\refvariance}{V_{\refset}}
+\newcommand{\refmeandef}{\refmean \triangleq
+  \frac{1}{|\refset|}\sum_{i\in\refset}x_i}
+\newcommand{\refvariancedef}{\refvariance \triangleq
+  \frac{1}{|\refset|}\sum_{i\in\refset}\norm{x_i-\refmean}^{2}}
+\newcommand{\kappasymbol}{\kappa^*}
+\newcommand{\kappastar}[1]{\kappasymbol(#1)}
+\newcommand{\robustnessratio}[1]{%
+  \frac{\norm{#1(x_1,\dots,x_{\nworkers})-\refmean}^{2}}{\refvariance}}
+% The optional domain distinguishes real inputs from sign messages.
+\newcommand{\kappastardef}[2][\vectorspace]{%
+  \kappastar{#2} \triangleq
+  \sup_{\substack{x_1,\dots,x_{\nworkers}\in #1 \\
+    \refset\in\refsubsets \\ \refvariance>0}}\robustnessratio{#2}}
+
+% The library name supports PDF bookmarks.
+% \krum denotes the aggregation rule, while \krumlib denotes the library.
 \DeclareRobustCommand{\krumlib}{\texorpdfstring{\textsc{Krum}}{Krum}}
 
-% --- Agrégateurs (noms d'algorithmes) ---
+% Aggregation algorithm names follow.
 \newcommand{\krum}{\textcode{Krum}}
 \newcommand{\mkrum}{\textcode{MultiKrum}}
 \newcommand{\monna}{\textcode{MoNNA}}
@@ -66,18 +146,18 @@
 \newcommand{\brute}{\textcode{Brute}}
 \newcommand{\nna}{\textcode{NNA}}
 \newcommand{\rfa}{\textcode{RFA}}
-% Travaux futurs (ch. 7) : règle 1-bit, visée mais pas encore implémentée.
+% Future work in Chapter 7 targets a one-bit rule that is not yet implemented.
 \newcommand{\signsgd}{\textcode{signSGD}}
 
-% --- Attaques (noms courts, sans le suffixe Attack des classes) ---
+% Attack names omit the Attack suffix used in class names.
 \newcommand{\signflip}{\textcode{SignFlip}}
 \newcommand{\alie}{\textcode{ALIE}}
 \newcommand{\gaussian}{\textcode{Gaussian}}
 \newcommand{\fullgradientnegation}{\textcode{FullGradientNegation}}
 \newcommand{\smallperturbation}{\textcode{SmallPerturbation}}
 
-% --- Code inline ---
+% Inline code commands follow.
 \newcommand{\code}[1]{\texttt{#1}}
-% Coupure de ligne autorisée mais invisible, pour les longs identifiants
-% CamelCase dans les colonnes étroites : \code{Full\coupure{}Gradient}.
+% An invisible line break can split long CamelCase identifiers in narrow columns.
+% For example, use \code{Full\coupure{}Gradient}.
 \newcommand{\coupure}{\allowbreak{}}
